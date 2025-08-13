@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login & Dashboard</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Main Page (Login/Register) */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #FFD700, #FFA500); /* Yellow to light orange */
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite;
+        flex-direction: column;
+        text-align: center;
+    }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .login-box {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    }
+    input {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background: orange;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: darkorange;
+    }
+
+    /* Dashboard Page */
+    .dashboard {
+        display: none;
+        min-height: 100vh;
+        background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(5px);
+    }
+    .logo {
+        font-size: 26px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+    nav ul li a:hover {
+        color: yellow;
+    }
+    .content {
+        max-width: 700px;
+        margin: 80px auto;
+        background: rgba(0,0,0,0.5);
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .content h1 span {
+        color: yellow;
+    }
+
+    /* HTML Basics Page */
+    .html-basics {
+        display: none;
+        padding: 20px;
+        background: #f4f4f4;
+        min-height: 100vh;
+    }
+    .html-basics h2 {
+        text-align: center;
+        color: #333;
+    }
+    .html-basics pre {
+        background: #222;
+        color: #0f0;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+</style>
+</head>
+<body>
+
+<!-- Login/Register Page -->
+<div class="login-container" id="loginPage">
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+<!-- Dashboard Page -->
+<div class="dashboard" id="dashboardPage">
+    <header>
+        <div class="logo">PraRoz</div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="logout()">HOME</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">SERVICE</a></li>
+                <li><a href="#">DESIGN</a></li>
+                <li><a href="#">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Web Design & <span>Development</span> Course</h1>
+        <p>Learn how to create stunning websites from scratch with our step-by-step tutorials.</p>
+        <button onclick="goToHTMLBasics()">JOIN US</button>
+    </div>
+</div>
+
+<!-- HTML Basics Page -->
+<div class="html-basics" id="htmlBasicsPage">
+    <h2>Learning the Basics of HTML</h2>
+    <p>HTML (HyperText Markup Language) is the standard language for creating webpages. Here are some key elements:</p>
+    
+    <h3>1. HTML Structure</h3>
+    <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Webpage&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;This is my first webpage.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+    <p><b>Explanation:</b> This is the basic structure of an HTML page.</p>
+
+    <h3>2. Headings</h3>
+    <pre>
+&lt;h1&gt;Main Heading&lt;/h1&gt;
+&lt;h2&gt;Subheading&lt;/h2&gt;
+    </pre>
+
+    <h3>3. Links</h3>
+    <pre>
+&lt;a href="https://example.com"&gt;Visit Example&lt;/a&gt;
+    </pre>
+
+    <h3>4. Images</h3>
+    <pre>
+&lt;img src="image.jpg" alt="Description"&gt;
+    </pre>
+
+    <button onclick="backToDashboard()">Back to Dashboard</button>
+</div>
+
+<script>
+function login() {
+    const email = document.getElementById("email").value;
+    if (email) {
+        localStorage.setItem("userEmail", email);
+        showDashboard();
+    }
+}
+
+function logout() {
+    localStorage.removeItem("userEmail");
+    document.getElementById("dashboardPage").style.display = "none";
+    document.getElementById("htmlBasicsPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+}
+
+function showDashboard() {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("dashboardPage").style.display = "block";
+    document.getElementById("htmlBasicsPage").style.display = "none";
+}
+
+function goToHTMLBasics() {
+    document.getElementById("dashboardPage").style.display = "none";
+    document.getElementById("htmlBasicsPage").style.display = "block";
+}
+
+function backToDashboard() {
+    showDashboard();
+}
+
+window.onload = function() {
+    if (localStorage.getItem("userEmail")) {
+        showDashboard();
+    }
+};
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login & Dashboard</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Main Page (Login/Register) */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #FFD700, #FFA500); /* Yellow to light orange */
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite;
+        flex-direction: column;
+        text-align: center;
+    }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .login-box {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    }
+    input {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background: orange;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: darkorange;
+    }
+
+    /* Dashboard Page */
+    .dashboard {
+        display: none;
+        min-height: 100vh;
+        background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(5px);
+    }
+    .logo {
+        font-size: 26px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+    nav ul li a:hover {
+        color: yellow;
+    }
+    .content {
+        max-width: 700px;
+        margin: 80px auto;
+        background: rgba(0,0,0,0.5);
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .content h1 span {
+        color: yellow;
+    }
+
+    /* HTML Basics Page */
+    .html-basics {
+        display: none;
+        padding: 20px;
+        background: #f4f4f4;
+        min-height: 100vh;
+    }
+    .html-basics h2 {
+        text-align: center;
+        color: #333;
+    }
+    .html-basics pre {
+        background: #222;
+        color: #0f0;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+</style>
+</head>
+<body>
+
+<!-- Login/Register Page -->
+<div class="login-container" id="loginPage">
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+<!-- Dashboard Page -->
+<div class="dashboard" id="dashboardPage">
+    <header>
+        <div class="logo">PraRoz</div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="logout()">HOME</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">SERVICE</a></li>
+                <li><a href="#">DESIGN</a></li>
+                <li><a href="#">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Web Design & <span>Development</span> Course</h1>
+        <p>Learn how to create stunning websites from scratch with our step-by-step tutorials.</p>
+        <button onclick="goToHTMLBasics()">JOIN US</button>
+    </div>
+</div>
+
+<!-- HTML Basics Page -->
+<div class="html-basics" id="htmlBasicsPage">
+    <h2>Learning the Basics of HTML</h2>
+    <p>HTML (HyperText Markup Language) is the standard language for creating webpages. Here are some key elements:</p>
+    
+    <h3>1. HTML Structure</h3>
+    <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Webpage&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;This is my first webpage.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+    <p><b>Explanation:</b> This is the basic structure of an HTML page.</p>
+
+    <h3>2. Headings</h3>
+    <pre>
+&lt;h1&gt;Main Heading&lt;/h1&gt;
+&lt;h2&gt;Subheading&lt;/h2&gt;
+    </pre>
+
+    <h3>3. Links</h3>
+    <pre>
+&lt;a href="https://example.com"&gt;Visit Example&lt;/a&gt;
+    </pre>
+
+    <h3>4. Images</h3>
+    <pre>
+&lt;img src="image.jpg" alt="Description"&gt;
+    </pre>
+
+    <button onclick="backToDashboard()">Back to Dashboard</button>
+</div>
+
+<script>
+function login() {
+    const email = document.getElementById("email").value;
+    if (email) {
+        localStorage.setItem("userEmail", email);
+        showDashboard();
+    }
+}
+
+function logout() {
+    localStorage.removeItem("userEmail");
+    document.getElementById("dashboardPage").style.display = "none";
+    document.getElementById("htmlBasicsPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+}
+
+function showDashboard() {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("dashboardPage").style.display = "block";
+    document.getElementById("htmlBasicsPage").style.display = "none";
+}
+
+function goToHTMLBasics() {
+    document.getElementById("dashboardPage").style.display = "none";
+    document.getElementById("htmlBasicsPage").style.display = "block";
+}
+
+function backToDashboard() {
+    showDashboard();
+}
+
+window.onload = function() {
+    if (localStorage.getItem("userEmail")) {
+        showDashboard();
+    }
+};
+</script>
+
+</body>
+</html>
